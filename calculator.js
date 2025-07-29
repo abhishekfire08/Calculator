@@ -63,60 +63,62 @@ class Calculator {
     }
   }
 
-  const display = document.querySelector('.display');
-  const calculator = new Calculator(display);
+document.addEventListener('DOMContentLoaded', () => {
+    const display = document.querySelector('.display');
+    const calculator = new Calculator(display);
 
-  const numberButtons = document.querySelectorAll('.digit');
-  const operationButtons = document.querySelectorAll('.operator');
-  const equalsButton = document.querySelector('.operator[onclick*="="]');
-  const clearButton = document.querySelector('.clear');
+    const numberButtons = document.querySelectorAll('.digit');
+    const operationButtons = document.querySelectorAll('.operator');
+    const equalsButton = document.querySelector('.operator:last-child');
+    const clearButton = document.querySelector('.clear');
 
-  numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      calculator.appendNumber(button.innerText);
+    numberButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            calculator.appendNumber(button.innerText);
+        });
     });
-  });
 
-  operationButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      calculator.chooseOperation(button.innerText);
+    operationButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if(button.innerText === '=') {
+                calculator.compute();
+            } else {
+                calculator.chooseOperation(button.innerText);
+            }
+        });
     });
-  });
 
-  equalsButton.addEventListener('click', button => {
-    calculator.compute();
-  });
+    clearButton.addEventListener('click', button => {
+        calculator.clear();
+    });
 
-  clearButton.addEventListener('click', button => {
-    calculator.clear();
-  });
+    document.addEventListener('keydown', (event) => {
+        let patternForNumbers = /[0-9]/g;
+        let patternForOperators = /[+\-*\/]/g
+        if (event.key.match(patternForNumbers)) {
+          event.preventDefault();
+          calculator.appendNumber(event.key)
+        }
+        if (event.key === '.') {
+          event.preventDefault();
+          calculator.appendNumber(event.key)
+        }
+        if (event.key.match(patternForOperators)) {
+          event.preventDefault();
+          calculator.chooseOperation(event.key)
+        }
+        if (event.key === 'Enter' || event.key === '=') {
+          event.preventDefault();
+          calculator.compute()
+        }
+        if (event.key === "Backspace") {
+          event.preventDefault();
+          calculator.clear();
+        }
+        if (event.key == 'c' || event.key == 'C') {
+          event.preventDefault();
+          calculator.clear();
+        }
 
-  document.addEventListener('keydown', (event) => {
-    let patternForNumbers = /[0-9]/g;
-    let patternForOperators = /[+\-*\/]/g
-    if (event.key.match(patternForNumbers)) {
-      event.preventDefault();
-      calculator.appendNumber(event.key)
-    }
-    if (event.key === '.') {
-      event.preventDefault();
-      calculator.appendNumber(event.key)
-    }
-    if (event.key.match(patternForOperators)) {
-      event.preventDefault();
-      calculator.chooseOperation(event.key)
-    }
-    if (event.key === 'Enter' || event.key === '=') {
-      event.preventDefault();
-      calculator.compute()
-    }
-    if (event.key === "Backspace") {
-      event.preventDefault();
-      calculator.clear();
-    }
-    if (event.key == 'c' || event.key == 'C') {
-      event.preventDefault();
-      calculator.clear();
-    }
-
-  });
+      });
+});
